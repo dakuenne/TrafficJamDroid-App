@@ -21,7 +21,7 @@ package org.traffic.jamdroid.views;
 import java.util.List;
 
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.MapView.Projection;
+import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.Overlay;
 import org.traffic.jamdroid.R;
 import org.traffic.jamdroid.model.LocalData;

@@ -20,7 +20,7 @@ package org.traffic.jamdroid.views.overlays;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.MapView.Projection;
+import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.Overlay;
 
 import android.content.Context;
@@ -86,7 +86,7 @@ public class RoutingPointOverlay extends Overlay {
 		// transform geo-position to point on canvas
 		Projection projection = osmv.getProjection();
 		Point point = new Point();
-		projection.toMapPixels(geopoint, point);
+		projection.toPixels(geopoint, point);
 
 		// the circle to mark the spot
 		Paint circlePaint = new Paint();

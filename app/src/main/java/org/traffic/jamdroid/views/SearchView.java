@@ -23,6 +23,7 @@ import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.tileprovider.MapTileProviderBase;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.Projection;
 import org.traffic.jamdroid.model.SearchData;
 import org.traffic.jamdroid.views.overlays.RoutingPointOverlay;
 
@@ -113,7 +114,7 @@ public class SearchView extends MapView {
 			final ResourceProxy resourceProxy,
 			final MapTileProviderBase aTileProvider,
 			final Handler tileRequestCompleteHandler) {
-		super(context, tileSizePixels, resourceProxy, aTileProvider,
+		super(context, resourceProxy, aTileProvider,
 				tileRequestCompleteHandler);
 		prepareView(context);
 	}
