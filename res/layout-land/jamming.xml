@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/jamside"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="match_parent"
+	android:layout_weight="1.0" android:orientation="vertical">
+
+	<TextView android:id="@+id/jaminfo" android:layout_height="30dip"
+		android:gravity="center" android:textSize="30px" android:layout_width="fill_parent"
+		android:textColor="#ffffff" android:text="@string/alert_jam" />
+
+	<LinearLayout android:id="@+id/jamlayout"
+		android:layout_width="fill_parent" android:layout_height="fill_parent"
+		android:background="@drawable/background" android:padding="10dp"
+		android:orientation="vertical">
+
+		<TableLayout android:layout_width="fill_parent"
+			android:id="@+id/tableLayout1" android:layout_height="wrap_content"
+			android:background="@drawable/rounded_corners"
+			android:layout_marginBottom="10dp">
+
+			<TableRow android:id="@+id/tableRow1" android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+
+				<CheckBox android:layout_width="0dp" android:layout_weight="1.0"
+					android:layout_height="wrap_content" android:id="@+id/rb1"
+					android:drawableLeft="@drawable/ic_jam_jam" android:text="@string/dsc_jam_jam"
+					android:textColor="#000000" />
+				<CheckBox android:layout_width="0dp" android:layout_weight="1.0"
+					android:layout_height="wrap_content" android:id="@+id/rb2"
+					android:drawableLeft="@drawable/ic_jam_crash" android:text="@string/dsc_jam_crash"
+					android:textColor="#000000" />
+
+			</TableRow>
+
+			<TableRow android:id="@+id/tableRow2" android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+
+				<CheckBox android:layout_width="0dp" android:layout_weight="1.0"
+					android:layout_height="wrap_content" android:id="@+id/rb3"
+					android:drawableLeft="@drawable/ic_jam_construction" android:text="@string/dsc_jam_construction"
+					android:textColor="#000000" />
+				<CheckBox android:layout_width="0dp" android:layout_weight="1.0"
+					android:layout_height="wrap_content" android:id="@+id/rb4"
+					android:drawableLeft="@drawable/ic_jam_ice" android:text="@string/dsc_jam_ice"
+					android:textColor="#000000" />
+
+			</TableRow>
+
+			<TableRow android:id="@+id/tableRow3" android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+
+				<CheckBox android:layout_width="0dp" android:layout_weight="1.0"
+					android:layout_height="wrap_content" android:id="@+id/rb5"
+					android:drawableLeft="@drawable/ic_jam_event" android:text="@string/dsc_jam_event"
+					android:textColor="#000000" />
+				<CheckBox android:layout_width="0dp" android:layout_weight="1.0"
+					android:layout_height="wrap_content" android:id="@+id/rb6"
+					android:drawableLeft="@drawable/ic_jam_general" android:text="@string/dsc_jam_general"
+					android:textColor="#000000" />
+
+			</TableRow>
+
+		</TableLayout>
+
+		<LinearLayout android:layout_height="wrap_content"
+			android:layout_width="fill_parent" android:id="@+id/layposition"
+			android:background="@drawable/rounded_corners"
+			android:layout_marginBottom="10dp" android:padding="5dp">
+
+			<ImageView android:layout_height="wrap_content"
+				android:layout_width="wrap_content" android:background="@drawable/ic_jam_position" />
+
+			<TextView android:layout_height="fill_parent"
+				android:textSize="16dp" android:layout_width="wrap_content"
+				android:text="@string/dsc_jam_position" android:textColor="#000000"
+				android:gravity="center_vertical" />
+
+			<TextView android:layout_height="fill_parent"
+				android:layout_marginRight="5dp" android:textSize="16dp"
+				android:textColor="#000000" android:layout_width="fill_parent" android:layout_weight="1.0"
+				android:id="@+id/cur_position" android:gravity="center|right" />
+
+			<ImageButton android:layout_height="fill_parent"
+				android:layout_width="wrap_content" android:layout_weight="0.0"
+				android:src="@drawable/ic_menu_mapmode" android:id="@+id/btn_jam_search"
+				android:layout_gravity="right" />
+
+		</LinearLayout>
+
+		<Button android:layout_height="wrap_content" android:textSize="16dp"
+			android:layout_width="fill_parent" android:id="@+id/btn_submit"
+			android:text="@string/alert_jam" />
+
+	</LinearLayout>
+
+</LinearLayout>

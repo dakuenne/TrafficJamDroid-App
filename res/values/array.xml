@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="listDataBorder">
+        <item>nur aktuellen Abschnitt</item>
+        <item>aktueller und alle benachbarten Abschnitte</item>
+        <item>BoundingBox</item>
+    </string-array>
+    <string-array name="listDataBorderValues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/probside"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="match_parent"
+	android:layout_weight="1.0" android:orientation="vertical">
+
+	<TextView android:id="@+id/probinfo" android:layout_height="30dip"
+		android:gravity="center" android:textSize="30px" android:layout_width="fill_parent"
+		android:textColor="#ffffff" android:text="@string/alert_prob" />
+
+	<LinearLayout android:id="@+id/problayout"
+		android:layout_width="fill_parent" android:layout_height="fill_parent"
+		android:background="@drawable/background" android:padding="10dp"
+		android:orientation="vertical">
+
+		<ListView android:id="@android:id/list" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" android:background="@drawable/rounded_corners"
+			android:padding="5dp"/>
+
+	</LinearLayout>
+
+</LinearLayout>
+		

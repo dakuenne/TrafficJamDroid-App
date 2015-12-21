@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<PreferenceCategory android:title="@string/pref_cat_server">
+
+		<EditTextPreference android:name="ServerPreference"
+			android:summary="@string/pref_summary_server" android:defaultValue="<SERVER_IP>
+			android:title="@string/pref_title_server" android:key="editServerPref" />
+
+		<EditTextPreference android:name="PortPreference"
+			android:summary="@string/pref_summary_port" android:defaultValue="<SERVER_PORT"
+			android:title="@string/pref_title_port" android:key="editPortPref" />
+
+		<EditTextPreference android:name="UpdatePreference"
+			android:summary="@string/pref_summary_update" android:defaultValue="30"
+			android:title="@string/pref_title_update" android:key="editUpdatePref" />
+
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/pref_cat_gps">
+
+		<CheckBoxPreference android:title="@string/pref_title_send"
+			android:defaultValue="true" android:summary="@string/pref_summary_send"
+			android:key="sendDataPref" />
+			
+		<ListPreference android:title="@string/pref_title_data"
+			android:summary="@string/pref_summary_data"
+			android:key="getDataPref" android:defaultValue="2"
+			android:entries="@array/listDataBorder" android:entryValues="@array/listDataBorderValues" />
+
+	</PreferenceCategory>
+
+</PreferenceScreen>
