@@ -199,7 +199,7 @@ public class UpdateGPSTask extends AsyncTask<Context, Void, Void> {
 	private ItemizedIconOverlay.OnItemGestureListener<OverlayItem> gestureListener = new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
 		@Override
 		public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-			Toast.makeText(context, item.mTitle + ", " + item.mDescription,
+			Toast.makeText(context, item.getTitle() + ", " + item.getSnippet(),
 					Toast.LENGTH_LONG).show();
 			return true;
 		}

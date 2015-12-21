@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.MapView.Projection;
+import org.osmdroid.views.Projection;
 import org.traffic.jamdroid.model.LocalViewContainer;
 
 import android.graphics.Canvas;
@@ -89,7 +89,7 @@ public class RouteOverlayItem extends DrawableOverlayItem {
 		for (GeoPoint geopoint : drawingPoints) {
 			// transform geo-position to point on canvas
 			Point point = new Point();
-			projection.toMapPixels(geopoint, point);
+			projection.toPixels(geopoint, point);
 
 			// the circle to mark the spot
 			Paint circlePaint = new Paint();

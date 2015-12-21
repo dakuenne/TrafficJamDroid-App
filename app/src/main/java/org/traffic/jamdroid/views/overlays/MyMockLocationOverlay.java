@@ -12,13 +12,14 @@ import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.LocationListenerProxy;
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.SensorEventListenerProxy;
+import org.osmdroid.api.IMapController;
 import org.osmdroid.api.IMyLocationOverlay;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.util.LocationUtils;
 import org.osmdroid.util.NetworkLocationIgnorer;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.MapView.Projection;
+import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.IOverlayMenuProvider;
 import org.osmdroid.views.overlay.Overlay.Snappable;
 import org.slf4j.Logger;
@@ -78,7 +79,7 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
 
         protected final MapView mMapView;
 
-        private final MapController mMapController;
+        private final IMapController mMapController;
         private final LocationManager mLocationManager;
         private final SensorManager mSensorManager;
         private final Display mDisplay;
@@ -238,7 +239,7 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
             final GeoPoint myLocation) {
 
                 final Projection pj = mapView.getProjection();
-                pj.toMapPixels(mMyLocation, mMapCoords);
+                pj.toPixels(mMyLocation, mMapCoords);
 
                 if (mDrawAccuracyEnabled) {
                         final float radius = pj.metersToEquatorPixels(lastFix.getAccuracy());
@@ -441,12 +442,11 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
         public void onStatusChanged(final String provider, final int status, final Bundle extras) {
         }
 
-        @Override
         public boolean onSnapToItem(final int x, final int y, final Point snapPoint,
                         final MapView mapView) {
                 if (this.mLocation != null) {
                         final Projection pj = mapView.getProjection();
-                        pj.toMapPixels(new GeoPoint(mLocation), mMapCoords);
+                        pj.toPixels(new GeoPoint(mLocation), mMapCoords);
                         snapPoint.x = mMapCoords.x;
                         snapPoint.y = mMapCoords.y;
                         final double xDiff = x - mMapCoords.x;

@@ -23,7 +23,7 @@ import java.util.List;
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.MapView.Projection;
+import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.Overlay;
 import org.traffic.jamdroid.R;
 import org.traffic.jamdroid.model.LocalViewContainer;
@@ -56,8 +56,7 @@ public class RoadOverlay<Item extends DrawableOverlayItem> extends Overlay {
 	/** A list of all items on this overlay */
 	protected final List<Item> itemList;
 
-	/** The position of the touch */
-	private final Point touchScreenPoint = new Point();
+	private final Point mItemPoint = new Point();
 
 	/**
 	 * Custom-Constructor with a list of items and the {@link Context} of the
@@ -207,13 +206,11 @@ public class RoadOverlay<Item extends DrawableOverlayItem> extends Overlay {
 		final int eventX = (int) event.getX();
 		final int eventY = (int) event.getY();
 
-		/* These objects are created to avoid construct new ones every cycle. */
-		pj.fromMapPixels(eventX, eventY, touchScreenPoint);
-
 		for (int i = 0; i < this.itemList.size(); ++i) {
 			final Item item = getItem(i);
+			pj.toPixels(item.getPoint(), mItemPoint);
 
-			if (hitTest(item, touchScreenPoint.x, touchScreenPoint.y, mapView)) {
+			if (hitTest(item, eventX - mItemPoint.x, eventY - mItemPoint.y, mapView)) {
 				if (task.run(i)) {
 					return true;
 				}

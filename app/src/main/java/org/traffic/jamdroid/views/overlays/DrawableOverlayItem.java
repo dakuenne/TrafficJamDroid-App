@@ -21,9 +21,10 @@ package org.traffic.jamdroid.views.overlays;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.osmdroid.util.BoundingBoxE6;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.MapView.Projection;
+import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import android.graphics.Canvas;
@@ -206,7 +207,7 @@ public class DrawableOverlayItem extends OverlayItem {
 
 		while (this.pointsPrecomputed < size) {
 			final Point pt = this.points.get(this.pointsPrecomputed);
-			pj.toMapPixelsProjected(pt.x, pt.y, pt);
+			pj.toProjectedPixels(pt.x, pt.y, pt);
 
 			this.pointsPrecomputed++;
 		}
@@ -218,7 +219,12 @@ public class DrawableOverlayItem extends OverlayItem {
 
 		// clipping rectangle in the intermediate projection, to avoid
 		// performing projection.
-		final Rect clipBounds = pj.fromPixelsToProjected(pj.getScreenRect());
+		BoundingBoxE6 boundingBox = pj.getBoundingBox();
+		Point topLeft = pj.toProjectedPixels(boundingBox.getLatNorthE6(),
+				boundingBox.getLonWestE6(), null);
+		Point bottomRight = pj.toProjectedPixels(boundingBox.getLatSouthE6(),
+				boundingBox.getLonEastE6(), null);
+		final Rect clipBounds = new Rect(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
 
 		path.rewind();
 		projectedPoint0 = this.points.get(size - 1);
@@ -241,12 +247,12 @@ public class DrawableOverlayItem extends OverlayItem {
 			// segment was out of clip
 			// bounds
 			if (screenPoint0 == null) {
-				screenPoint0 = pj.toMapPixelsTranslated(projectedPoint0,
+				screenPoint0 = pj.toPixelsFromProjected(projectedPoint0,
 						this.tmpPoint1);
 				path.moveTo(screenPoint0.x, screenPoint0.y);
 			}
 
-			screenPoint1 = pj.toMapPixelsTranslated(projectedPoint1,
+			screenPoint1 = pj.toPixelsFromProjected(projectedPoint1,
 					this.tmpPoint2);
 
 			// skip this point, too close to previous point
