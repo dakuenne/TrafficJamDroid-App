@@ -4,11 +4,11 @@
 	<PreferenceCategory android:title="@string/pref_cat_server">
 
 		<EditTextPreference android:name="ServerPreference"
-			android:summary="@string/pref_summary_server" android:defaultValue="<SERVER_IP>
+			android:summary="@string/pref_summary_server" android:defaultValue="12"
 			android:title="@string/pref_title_server" android:key="editServerPref" />
 
 		<EditTextPreference android:name="PortPreference"
-			android:summary="@string/pref_summary_port" android:defaultValue="<SERVER_PORT"
+			android:summary="@string/pref_summary_port" android:defaultValue="80"
 			android:title="@string/pref_title_port" android:key="editPortPref" />
 
 		<EditTextPreference android:name="UpdatePreference"
