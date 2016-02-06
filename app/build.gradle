@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion Integer.parseInt(PROJECT_COMPILE_SDK_VERSION)
+    buildToolsVersion PROJECT_BUILD_TOOLS_VERSION
 
     defaultConfig {
         applicationId "org.traffic.jamdroid.trafficjamdroid"
@@ -13,9 +13,17 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    lintOptions {
+        abortOnError false
     }
 }
 
