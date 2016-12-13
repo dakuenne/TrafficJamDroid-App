@@ -33,6 +33,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.support.v7.widget.Toolbar;
 
 /**
  * Initial {@link android.app.Activity} of the application <i>TrafficJamDroid</i>.
@@ -69,6 +70,7 @@ public class TrafficJamDroidActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map);
+		setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
 		// performing a three-way-handshake to get a new id
 		new HandshakeTask().execute(getApplicationContext());

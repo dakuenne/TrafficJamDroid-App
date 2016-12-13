@@ -36,6 +36,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -63,6 +64,7 @@ public class JammingActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.jamming);
+		setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 		txtPosition = ((TextView) findViewById(R.id.cur_position));
 
 		// initialize the onCLickListener for all six checkboxes

@@ -25,6 +25,8 @@ import org.traffic.jamdroid.utils.IConstants;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.webkit.WebView;
 
 /**
@@ -33,12 +35,13 @@ import android.webkit.WebView;
  * @author Daniel Kuenne
  * @version $LastChangedRevision: 151 $
  */
-public class HelpActivity extends Activity {
+public class HelpActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.help);
+		setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
 		Bundle extras = getIntent().getExtras();
 		String anchor = extras.getString("param");

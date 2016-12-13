@@ -37,6 +37,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -49,7 +51,7 @@ import android.widget.EditText;
  * @author Daniel Kuenne
  * @version $LastChangedRevision: 191 $
  */
-public class SearchActivity extends Activity {
+public class SearchActivity extends AppCompatActivity {
 
 	/** The displayed map */
 	private SearchView map;
@@ -58,6 +60,7 @@ public class SearchActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.search_address);
+		setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
 		// setting up the map
 		map = (SearchView) findViewById(R.id.prev_map);

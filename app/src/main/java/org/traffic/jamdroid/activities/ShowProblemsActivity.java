@@ -36,6 +36,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 /**
  * This activity visualizes the identified recurring problems. It is called by
@@ -46,7 +48,7 @@ import android.os.Bundle;
  * @see MapView
  * @see ProgressDialog
  */
-public class ShowProblemsActivity extends Activity {
+public class ShowProblemsActivity extends AppCompatActivity {
 
 	/** The dialog to show the users that the data is loading */
 	private ProgressDialog pd = null;
@@ -58,6 +60,7 @@ public class ShowProblemsActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.problemmap);
+		setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 		mapView = (MapView) findViewById(R.id.probmapview);
 		this.pd = ProgressDialog.show(this, "", getApplicationContext()
 				.getResources().getString(R.string.popup_visualize_problems));

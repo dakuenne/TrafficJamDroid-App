@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- primary colors -->
+    <color name="chaos_primary">#607d8b</color>
+    <color name="chaos_primary_light">#cfd8dc</color>
+    <color name="chaos_primary_dark">#455a64</color>
+
+    <!-- accent colors -->
+    <color name="chaos_accent">#ff5252</color>
+    <color name="chaos_accent_light">#ff8a80</color>
+    <color name="chaos_accent_dark">#ff1744</color>
+
+    <style name="TrafficTheme.Base" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+
+        <!-- Support Library -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <!-- Material Design -->
+        <item name="colorPrimary">@color/chaos_primary</item>
+        <item name="colorPrimaryDark">@color/chaos_primary_dark</item>
+        <item name="colorAccent">@color/chaos_accent</item>
+    </style>
+
+    <style name="TrafficTheme" parent="TrafficTheme.Base"/>
+
+    <style name="TrafficTheme.Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="TrafficTheme.Popup" parent="ThemeOverlay.AppCompat.Light" />
+
+</resources>

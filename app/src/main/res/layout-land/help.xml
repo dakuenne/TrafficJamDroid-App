@@ -4,6 +4,10 @@
 	android:layout_width="fill_parent" android:layout_height="match_parent"
 	android:layout_weight="1.0" android:orientation="vertical">
 
+	<include
+		android:id="@+id/toolbar"
+		layout="@layout/toolbar" />
+
 	<TextView android:id="@+id/helpinfo" android:layout_height="30dip"
 		android:gravity="center" android:textSize="30px" android:layout_width="fill_parent"
 		android:textColor="#ffffff" android:text="@string/alert_help" />

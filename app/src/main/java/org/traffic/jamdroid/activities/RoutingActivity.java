@@ -49,6 +49,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -80,6 +81,7 @@ public class RoutingActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.routing);
+		setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
 		LocalData.getInstance().getRoute().clear();
 
