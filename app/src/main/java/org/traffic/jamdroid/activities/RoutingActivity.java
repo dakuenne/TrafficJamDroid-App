@@ -82,6 +82,7 @@ public class RoutingActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.routing);
 		setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+		setTitle(R.string.new_route);
 
 		LocalData.getInstance().getRoute().clear();
 

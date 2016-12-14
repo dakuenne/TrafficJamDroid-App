@@ -61,6 +61,7 @@ public class SearchActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.search_address);
 		setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+		setTitle(R.string.search_address);
 
 		// setting up the map
 		map = (SearchView) findViewById(R.id.prev_map);

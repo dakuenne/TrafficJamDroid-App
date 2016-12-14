@@ -61,6 +61,8 @@ public class ShowProblemsActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.problemmap);
 		setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+		setTitle(R.string.alert_prob);
+
 		mapView = (MapView) findViewById(R.id.probmapview);
 		this.pd = ProgressDialog.show(this, "", getApplicationContext()
 				.getResources().getString(R.string.popup_visualize_problems));

@@ -8,10 +8,6 @@
 		android:id="@+id/toolbar"
 		layout="@layout/toolbar" />
 
-	<TextView android:id="@+id/probmapinfo" android:layout_height="30dip"
-		android:gravity="center" android:textSize="30px" android:layout_width="fill_parent"
-		android:textColor="#ffffff" android:text="@string/alert_prob" />
-
 	<LinearLayout android:id="@+id/probmaplayout"
 		android:layout_width="fill_parent" android:layout_height="fill_parent"
 		android:background="@drawable/background" android:padding="10dp"

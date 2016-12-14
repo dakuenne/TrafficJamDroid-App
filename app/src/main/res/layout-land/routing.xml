@@ -8,10 +8,6 @@
 		android:id="@+id/toolbar"
 		layout="@layout/toolbar" />
 
-	<TextView android:id="@+id/routeinfo" android:layout_height="30dip"
-		android:gravity="center" android:textSize="25dip" android:layout_width="fill_parent"
-		android:textColor="#ffffff" android:text="@string/new_route" />
-
 	<LinearLayout android:orientation="vertical"
 		android:layout_width="fill_parent" android:layout_height="0dip"
 		android:layout_weight="1" android:background="@drawable/background"

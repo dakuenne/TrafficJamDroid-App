@@ -42,6 +42,7 @@ public class HelpActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.help);
 		setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+		setTitle(R.string.alert_help);
 
 		Bundle extras = getIntent().getExtras();
 		String anchor = extras.getString("param");

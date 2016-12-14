@@ -7,10 +7,6 @@
 	<include
 		android:id="@+id/toolbar"
 		layout="@layout/toolbar" />
-
-	<TextView android:id="@+id/helpinfo" android:layout_height="30dip"
-		android:gravity="center" android:textSize="30px" android:layout_width="fill_parent"
-		android:textColor="#ffffff" android:text="@string/alert_help" />
 		
 	<WebView android:id="@+id/helpview" android:layout_height="fill_parent" android:layout_width="fill_parent"/>
 

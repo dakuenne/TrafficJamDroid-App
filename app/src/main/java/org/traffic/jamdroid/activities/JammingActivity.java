@@ -65,6 +65,8 @@ public class JammingActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.jamming);
 		setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+		setTitle(R.string.alert_jam);
+
 		txtPosition = ((TextView) findViewById(R.id.cur_position));
 
 		// initialize the onCLickListener for all six checkboxes

@@ -8,10 +8,6 @@
 		android:id="@+id/toolbar"
 		layout="@layout/toolbar" />
 
-	<TextView android:id="@+id/jaminfo" android:layout_height="30dip"
-		android:gravity="center" android:textSize="30px" android:layout_width="fill_parent"
-		android:textColor="#ffffff" android:text="@string/alert_jam" />
-
 	<LinearLayout android:id="@+id/jamlayout"
 		android:layout_width="fill_parent" android:layout_height="fill_parent"
 		android:background="@drawable/background" android:padding="10dp"
