@@ -39,5 +39,6 @@ public class PreferencesActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.preferences);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setTitle(R.string.prefs);
 	}
 }
