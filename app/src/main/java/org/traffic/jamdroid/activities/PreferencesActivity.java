@@ -18,10 +18,10 @@
  */
 package org.traffic.jamdroid.activities;
 
-import org.traffic.jamdroid.R;
-
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import android.support.v7.widget.Toolbar;
+
+import org.traffic.jamdroid.R;
 
 /**
  * This activity gives the user the opportunity to change a few preferences.
@@ -29,7 +29,7 @@ import android.preference.PreferenceActivity;
  * @author Daniel Kuenne
  * @version $LastChangedRevision: 224 $
  */
-public class PreferencesActivity extends PreferenceActivity {
+public class PreferencesActivity extends BaseActivity {
 
 	/**
 	 * {@inheritDoc}
@@ -37,6 +37,7 @@ public class PreferencesActivity extends PreferenceActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.preferences);
+        setContentView(R.layout.preferences);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 	}
 }
