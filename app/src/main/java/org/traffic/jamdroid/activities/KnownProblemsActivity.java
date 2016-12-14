@@ -18,9 +18,17 @@
  */
 package org.traffic.jamdroid.activities;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import android.app.ListActivity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,15 +38,9 @@ import org.traffic.jamdroid.utils.IConstants;
 import org.traffic.jamdroid.utils.Request;
 import org.traffic.jamdroid.utils.Requester;
 
-import android.app.ListActivity;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This activity shows the user a list of all recurring problems. Additionally a
@@ -49,7 +51,7 @@ import android.widget.ListView;
  * @see ListActivity
  * @see ProgressDialog
  */
-public class KnownProblemsActivity extends ListActivity {
+public class KnownProblemsActivity extends BaseActivity {
 
 	/** The dialog to show the users that the data is loading */
 	private ProgressDialog pd = null;
@@ -57,22 +59,33 @@ public class KnownProblemsActivity extends ListActivity {
 	/** A map with the problems and a list of the belonging streets */
 	private Map<String, ArrayList<Integer>> problems = null;
 
+    private ListView listView;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.knownproblems);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+		setTitle(R.string.alert_prob);
+
+        listView = (ListView)findViewById(R.id.list);
+        if (listView != null)
+            listView.setOnItemClickListener(new ProblemClickListener());
 		this.pd = ProgressDialog.show(this, "", getApplicationContext()
 				.getResources().getString(R.string.popup_search_problems));
 		new GetProblemsTask().execute();
 	}
 
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Intent out = new Intent(this, ShowProblemsActivity.class);
-		out.putIntegerArrayListExtra("data", problems.get(problems.keySet()
-				.toArray(new String[0])[position]));
-		startActivity(out);
-	}
+    private class ProblemClickListener implements AdapterView.OnItemClickListener
+    {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent out = new Intent(KnownProblemsActivity.this, ShowProblemsActivity.class);
+            out.putIntegerArrayListExtra("data", problems.get(problems.keySet()
+                    .toArray(new String[0])[position]));
+            startActivity(out);
+        }
+    }
 
 	/**
 	 * Task to get all known problems from the server.
@@ -122,9 +135,10 @@ public class KnownProblemsActivity extends ListActivity {
 		@Override
 		protected void onPostExecute(Map<String, ArrayList<Integer>> result) {
 			KnownProblemsActivity.this.problems = result;
-			KnownProblemsActivity.this.setListAdapter(new ArrayAdapter<String>(
-					KnownProblemsActivity.this, R.layout.row, R.id.problem,
-					result.keySet().toArray(new String[0])));
+            if (listView != null)
+                listView.setAdapter(new ArrayAdapter<String>(
+                        KnownProblemsActivity.this, R.layout.row, R.id.problem,
+                        result.keySet().toArray(new String[0])));
 			if (KnownProblemsActivity.this.pd != null) {
 				KnownProblemsActivity.this.pd.dismiss();
 			}
