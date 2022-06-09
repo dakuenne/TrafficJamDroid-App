@@ -5,6 +5,8 @@ import java.util.List;
 
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
+import android.os.SystemClock;
 
 public class MockLocationProvider extends Thread {
 
@@ -51,6 +53,13 @@ public class MockLocationProvider extends Thread {
 			location.setAltitude(altitude);
 			location.setBearing(location.bearingTo(next));
 			location.setTime(Long.valueOf(parts[0]));
+			location.setAccuracy(10.0f);
+			if (Build.VERSION.SDK_INT >= 26) {
+				location.setVerticalAccuracyMeters(0.5f);
+				location.setSpeedAccuracyMetersPerSecond(2.0f);
+				location.setBearingAccuracyDegrees(2.5f);
+				location.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
+			}
 
 			if (location.getLatitude() != next.getLatitude() && location.distanceTo(next) > 10)
 				locationManager.setTestProviderLocation(mocLocationProvider,

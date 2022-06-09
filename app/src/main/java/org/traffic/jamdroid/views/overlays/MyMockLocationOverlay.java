@@ -1,46 +1,8 @@
 package org.traffic.jamdroid.views.overlays;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.osmdroid.DefaultResourceProxyImpl;
-import org.osmdroid.LocationListenerProxy;
-import org.osmdroid.ResourceProxy;
-import org.osmdroid.SensorEventListenerProxy;
-import org.osmdroid.api.IMapController;
-import org.osmdroid.api.IMyLocationOverlay;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.util.LocationUtils;
-import org.osmdroid.util.NetworkLocationIgnorer;
-import org.osmdroid.views.MapController;
-import org.osmdroid.views.MapView;
-import org.osmdroid.views.Projection;
-import org.osmdroid.views.overlay.IOverlayMenuProvider;
-import org.osmdroid.views.overlay.Overlay.Snappable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.traffic.jamdroid.R;
-import org.traffic.jamdroid.model.LocalData;
-import org.traffic.jamdroid.model.LocalViewContainer;
-import org.traffic.jamdroid.model.Preferences;
-import org.traffic.jamdroid.model.RemoteData;
-import org.traffic.jamdroid.model.RoutePoint;
-import org.traffic.jamdroid.test.MockLocationProvider;
-import org.traffic.jamdroid.utils.IConstants;
-import org.traffic.jamdroid.utils.Request;
-import org.traffic.jamdroid.utils.Requester;
-import org.traffic.jamdroid.views.InfoView;
-import org.traffic.jamdroid.views.LimitationsView;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -66,16 +28,46 @@ import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.WindowManager;
 
+import org.osmdroid.LocationListenerProxy;
+import org.osmdroid.SensorEventListenerProxy;
+import org.osmdroid.api.IMapController;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.util.LocationUtils;
+import org.osmdroid.util.NetworkLocationIgnorer;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.Projection;
+import org.osmdroid.views.overlay.IOverlayMenuProvider;
+import org.osmdroid.views.overlay.Overlay.Snappable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.traffic.jamdroid.BuildConfig;
+import org.traffic.jamdroid.R;
+import org.traffic.jamdroid.model.LocalData;
+import org.traffic.jamdroid.model.LocalViewContainer;
+import org.traffic.jamdroid.model.Preferences;
+import org.traffic.jamdroid.model.RemoteData;
+import org.traffic.jamdroid.model.RoutePoint;
+import org.traffic.jamdroid.test.MockLocationProvider;
+import org.traffic.jamdroid.utils.IConstants;
+import org.traffic.jamdroid.utils.Request;
+import org.traffic.jamdroid.utils.Requester;
+import org.traffic.jamdroid.views.InfoView;
+import org.traffic.jamdroid.views.LimitationsView;
 
-public class MyMockLocationOverlay extends LocationOverlay implements IMyLocationOverlay, IOverlayMenuProvider,
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+public class MyMockLocationOverlay extends LocationOverlay implements IOverlayMenuProvider,
                 SensorEventListener, LocationListener, Snappable {
 
         private static final Logger logger = LoggerFactory.getLogger(MyMockLocationOverlay.class);
         protected final Paint mPaint = new Paint();
         protected final Paint mCirclePaint = new Paint();
-
-        protected final Bitmap PERSON_ICON;
-        protected final Bitmap DIRECTION_ARROW;
 
         protected final MapView mMapView;
 
@@ -99,12 +91,6 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
 
         private final Matrix directionRotater = new Matrix();
 
-        /** Coordinates the feet of the person are located scaled for display density. */
-        protected final PointF PERSON_HOTSPOT;
-
-        protected final float DIRECTION_ARROW_CENTER_X;
-        protected final float DIRECTION_ARROW_CENTER_Y;
-
         protected final Picture mCompassFrame = new Picture();
         protected final Picture mCompassRose = new Picture();
         private final Matrix mCompassMatrix = new Matrix();
@@ -118,10 +104,10 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
         private float mCompassCenterY = 35.0f;
         private final float mCompassRadius = 20.0f;
 
-        protected final float COMPASS_FRAME_CENTER_X;
+        /*protected final float COMPASS_FRAME_CENTER_X;
         protected final float COMPASS_FRAME_CENTER_Y;
         protected final float COMPASS_ROSE_CENTER_X;
-        protected final float COMPASS_ROSE_CENTER_Y;
+        protected final float COMPASS_ROSE_CENTER_Y;*/
 
         public static final int MENU_MY_LOCATION = getSafeMenuId();
         public static final int MENU_COMPASS = getSafeMenuId();
@@ -139,14 +125,9 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
         // Constructors
         // ===========================================================
 
-        public MyMockLocationOverlay(final Context ctx, final MapView mapView) {
-                this(ctx, mapView, new DefaultResourceProxyImpl(ctx));
-        }
-
-        public MyMockLocationOverlay(final Context ctx, final MapView mapView,
-                        final ResourceProxy pResourceProxy) {
-                super(ctx, mapView, pResourceProxy);
-                this.ctx = ctx;
+        public MyMockLocationOverlay(final MapView mapView) {
+                super(mapView);
+                this.ctx = mapView.getContext();
                 mMapView = mapView;
                 mLocationManager = (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE);
                 mSensorManager = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
@@ -157,22 +138,8 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
                 mCirclePaint.setARGB(0, 100, 100, 255);
                 mCirclePaint.setAntiAlias(true);
 
-                PERSON_ICON = mResourceProxy.getBitmap(ResourceProxy.bitmap.person);
-                DIRECTION_ARROW = mResourceProxy.getBitmap(ResourceProxy.bitmap.direction_arrow);
-
-                DIRECTION_ARROW_CENTER_X = DIRECTION_ARROW.getWidth() / 2 - 0.5f;
-                DIRECTION_ARROW_CENTER_Y = DIRECTION_ARROW.getHeight() / 2 - 0.5f;
-
-                // Calculate position of person icon's feet, scaled to screen density
-                PERSON_HOTSPOT = new PointF(24.0f * mScale + 0.5f, 39.0f * mScale + 0.5f);
-
                 createCompassFramePicture();
                 createCompassRosePicture();
-
-                COMPASS_FRAME_CENTER_X = mCompassFrame.getWidth() / 2 - 0.5f;
-                COMPASS_FRAME_CENTER_Y = mCompassFrame.getHeight() / 2 - 0.5f;
-                COMPASS_ROSE_CENTER_X = mCompassRose.getWidth() / 2 - 0.5f;
-                COMPASS_ROSE_CENTER_Y = mCompassRose.getHeight() / 2 - 0.5f;
         }
 
         // ===========================================================
@@ -256,7 +223,7 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
                 canvas.getMatrix(mMatrix);
                 mMatrix.getValues(mMatrixValues);
 
-                if (DEBUGMODE) {
+                if (BuildConfig.DEBUG) {
                         final float tx = (-mMatrixValues[Matrix.MTRANS_X] + 20)
                                         / mMatrixValues[Matrix.MSCALE_X];
                         final float ty = (-mMatrixValues[Matrix.MTRANS_Y] + 90)
@@ -276,29 +243,29 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
                          */
                         directionRotater.setRotate(
                                         lastFix.getBearing(),
-                                        DIRECTION_ARROW_CENTER_X, DIRECTION_ARROW_CENTER_Y);
+                                        mDirectionArrowCenterX, mDirectionArrowCenterY);
 
-                        directionRotater.postTranslate(-DIRECTION_ARROW_CENTER_X, -DIRECTION_ARROW_CENTER_Y);
+                        directionRotater.postTranslate(-mDirectionArrowCenterX, -mDirectionArrowCenterY);
                         directionRotater.postScale(
                                         1 / mMatrixValues[Matrix.MSCALE_X],
                                         1 / mMatrixValues[Matrix.MSCALE_Y]);
                         directionRotater.postTranslate(mMapCoords.x, mMapCoords.y);
-                        canvas.drawBitmap(DIRECTION_ARROW, directionRotater, mPaint);
+                        canvas.drawBitmap(mDirectionArrowBitmap, directionRotater, mPaint);
                 } else {
-                        directionRotater.setTranslate(-PERSON_HOTSPOT.x, -PERSON_HOTSPOT.y);
+                        directionRotater.setTranslate(-mPersonHotspot.x, -mPersonHotspot.y);
                         directionRotater.postScale(
                                         1 / mMatrixValues[Matrix.MSCALE_X],
                                         1 / mMatrixValues[Matrix.MSCALE_Y]);
                         directionRotater.postTranslate(mMapCoords.x, mMapCoords.y);
-                        canvas.drawBitmap(PERSON_ICON, directionRotater, mPaint);
+                        canvas.drawBitmap(mPersonBitmap, directionRotater, mPaint);
                 }
         }
 
         protected void drawCompass(final Canvas canvas, final float bearing) {
-                final float centerX = mCompassCenterX * mScale;
-                final float centerY = mCompassCenterY * mScale + (canvas.getHeight() - mMapView.getHeight());
+                final float centerX = 0.5f ;//mCompassCenterX * mScale;
+                final float centerY = 0.5f; //mCompassCenterY * mScale + (canvas.getHeight() - mMapView.getHeight());
 
-                mCompassMatrix.setTranslate(-COMPASS_FRAME_CENTER_X, -COMPASS_FRAME_CENTER_Y);
+                /*mCompassMatrix.setTranslate(-COMPASS_FRAME_CENTER_X, -COMPASS_FRAME_CENTER_Y);
                 mCompassMatrix.postTranslate(centerX, centerY);
 
                 canvas.save();
@@ -311,7 +278,7 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
 
                 canvas.setMatrix(mCompassMatrix);
                 canvas.drawPicture(mCompassRose);
-                canvas.restore();
+                canvas.restore();*/
         }
 
         // ===========================================================
@@ -327,9 +294,7 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
 
                 if (mLocation != null) {
 
-                        mMyLocation.setCoordsE6(
-                                        (int) (mLocation.getLatitude() * 1E6),
-                                        (int) (mLocation.getLongitude() * 1E6));
+                        mMyLocation.setCoords(mLocation.getLatitude(), mLocation.getLongitude());
 
                         drawMyLocation(canvas, mapView, mLocation, mMyLocation);
                 }
@@ -344,7 +309,7 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
 
         @Override
         public void onLocationChanged(final Location location) {
-                if (DEBUGMODE) {
+                if (BuildConfig.DEBUG) {
                         logger.debug("onLocationChanged(" + location + ")");
                 }
 
@@ -384,7 +349,7 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
         			if (route.size() > 0) {
         				GeoPoint position = new GeoPoint(location);
         				if (route.get(route.size() - 1).getPosition()
-        						.distanceTo(position) < 50) {
+        						.distanceToAsDouble(position) < 50) {
         					final Context context = LocalViewContainer.getInstance()
         							.getMapView().getContext();
         					AlertDialog.Builder builder = new AlertDialog.Builder(
@@ -452,7 +417,7 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
                         final double xDiff = x - mMapCoords.x;
                         final double yDiff = y - mMapCoords.y;
                         final boolean snap = xDiff * xDiff + yDiff * yDiff < 64;
-                        if (DEBUGMODE) {
+                        if (BuildConfig.DEBUG) {
                                 logger.debug("snap=" + snap);
                         }
                         return snap;
@@ -502,14 +467,14 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
         @Override
         public boolean onCreateOptionsMenu(final Menu pMenu, final int pMenuIdOffset,
                         final MapView pMapView) {
-                pMenu.add(0, MENU_MY_LOCATION + pMenuIdOffset, Menu.NONE,
+                /*pMenu.add(0, MENU_MY_LOCATION + pMenuIdOffset, Menu.NONE,
                                 mResourceProxy.getString(ResourceProxy.string.my_location)).setIcon(
                                 mResourceProxy.getDrawable(ResourceProxy.bitmap.ic_menu_mylocation));
 
                 pMenu.add(0, MENU_COMPASS + pMenuIdOffset, Menu.NONE,
                                 mResourceProxy.getString(ResourceProxy.string.compass)).setIcon(
                                 mResourceProxy.getDrawable(ResourceProxy.bitmap.ic_menu_compass));
-
+*/
                 return true;
         }
 
@@ -707,7 +672,6 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
          * features of this overlay. Remember to call the corresponding disableCompass() in your
          * Activity's Activity.onPause() method to turn off updates when in the background.
          */
-        @Override
         public boolean enableCompass() {
                 boolean result = true;
                 if (mSensorListener == null) {
@@ -727,7 +691,6 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
         /**
          * Disable orientation updates
          */
-        @Override
         public void disableCompass() {
                 if (mSensorListener != null) {
                         mSensorListener.stopListening();
@@ -748,12 +711,12 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
          *
          * @return true if enabled, false otherwise
          */
-        @Override
+
         public boolean isCompassEnabled() {
                 return mSensorListener != null;
         }
 
-        @Override
+
         public float getOrientation() {
                 return mAzimuth;
         }
@@ -791,9 +754,9 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
                 final Point point = this.calculatePointOnCircle(x, y, radius, degrees);
                 canvas.rotate(degrees, point.x, point.y);
                 final Path p = new Path();
-                p.moveTo(point.x - 2 * mScale, point.y);
-                p.lineTo(point.x + 2 * mScale, point.y);
-                p.lineTo(point.x, point.y - 5 * mScale);
+                //p.moveTo(point.x - 2 * mScale, point.y);
+                //p.lineTo(point.x + 2 * mScale, point.y);
+                //p.lineTo(point.x, point.y - 5 * mScale);
                 p.close();
                 canvas.drawPath(p, paint);
                 canvas.restore();
@@ -831,16 +794,16 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
                                 picBorderWidthAndHeight);
 
                 // draw compass inner circle and border
-                canvas.drawCircle(center, center, mCompassRadius * mScale, innerPaint);
-                canvas.drawCircle(center, center, mCompassRadius * mScale, outerPaint);
+                //canvas.drawCircle(center, center, mCompassRadius * mScale, innerPaint);
+                //canvas.drawCircle(center, center, mCompassRadius * mScale, outerPaint);
 
                 // Draw little triangles north, south, west and east (don't move)
                 // to make those move use "-bearing + 0" etc. (Note: that would mean to draw the triangles
                 // in the onDraw() method)
-                drawTriangle(canvas, center, center, mCompassRadius * mScale, 0, outerPaint);
-                drawTriangle(canvas, center, center, mCompassRadius * mScale, 90, outerPaint);
-                drawTriangle(canvas, center, center, mCompassRadius * mScale, 180, outerPaint);
-                drawTriangle(canvas, center, center, mCompassRadius * mScale, 270, outerPaint);
+                //drawTriangle(canvas, center, center, mCompassRadius * mScale, 0, outerPaint);
+                //drawTriangle(canvas, center, center, mCompassRadius * mScale, 90, outerPaint);
+                //drawTriangle(canvas, center, center, mCompassRadius * mScale, 180, outerPaint);
+                //drawTriangle(canvas, center, center, mCompassRadius * mScale, 270, outerPaint);
 
                 mCompassFrame.endRecording();
         }
@@ -876,7 +839,7 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
 
                 // Blue triangle pointing north
                 final Path pathNorth = new Path();
-                pathNorth.moveTo(center, center - (mCompassRadius - 3) * mScale);
+                /*pathNorth.moveTo(center, center - (mCompassRadius - 3) * mScale);
                 pathNorth.lineTo(center + 4 * mScale, center);
                 pathNorth.lineTo(center - 4 * mScale, center);
                 pathNorth.lineTo(center, center - (mCompassRadius - 3) * mScale);
@@ -890,7 +853,7 @@ public class MyMockLocationOverlay extends LocationOverlay implements IMyLocatio
                 pathSouth.lineTo(center - 4 * mScale, center);
                 pathSouth.lineTo(center, center + (mCompassRadius - 3) * mScale);
                 pathSouth.close();
-                canvas.drawPath(pathSouth, southPaint);
+                canvas.drawPath(pathSouth, southPaint);*/
 
                 // Draw a little white dot in the middle
                 canvas.drawCircle(center, center, 2, centerPaint);
