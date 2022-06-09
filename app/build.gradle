@@ -30,6 +30,6 @@ android {
 dependencies {
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:appcompat-v7:22.2.1'
-    implementation 'org.osmdroid:osmdroid-android:5.0.1@aar'
+    implementation 'org.osmdroid:osmdroid-android:6.1.13'
     implementation 'org.slf4j:slf4j-simple:1.6.1'
 }
