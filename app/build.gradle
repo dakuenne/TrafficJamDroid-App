@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "org.traffic.jamdroid.trafficjamdroid"
-        minSdkVersion 8
-        targetSdkVersion 22
+        minSdkVersion 14
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
     }
@@ -28,8 +28,8 @@ android {
 }
 
 dependencies {
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'org.osmdroid:osmdroid-android:5.0.1@aar'
-    compile 'org.slf4j:slf4j-simple:1.6.1'
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:22.2.1'
+    implementation 'org.osmdroid:osmdroid-android:5.0.1@aar'
+    implementation 'org.slf4j:slf4j-simple:1.6.1'
 }
