@@ -18,13 +18,17 @@
  */
 package org.traffic.jamdroid.views.overlays;
 
-import java.util.List;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.location.Location;
+import android.support.annotation.NonNull;
 
-import org.osmdroid.DefaultResourceProxyImpl;
-import org.osmdroid.ResourceProxy;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.MyLocationOverlay;
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
+import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import org.traffic.jamdroid.R;
 import org.traffic.jamdroid.model.LocalData;
 import org.traffic.jamdroid.model.LocalViewContainer;
@@ -37,10 +41,7 @@ import org.traffic.jamdroid.utils.Requester;
 import org.traffic.jamdroid.views.InfoView;
 import org.traffic.jamdroid.views.LimitationsView;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.location.Location;
+import java.util.List;
 
 /**
  * This overlay indicates the position of the car/user on the map. If no
@@ -50,44 +51,35 @@ import android.location.Location;
  * @author Daniel Kuenne
  * @version $LastChangedRevision: 227 $
  */
-public class LocationOverlay extends MyLocationOverlay {
+public class LocationOverlay extends MyLocationNewOverlay {
 
 	/** The old timestamp - used to calculate the speed of the car */
 	private long oldTime;
 
 	/** The old location - used to calculate the speed of the car */
-	private Location oldLocation = null;;
+	private Location oldLocation = null;
 
-	/**
-	 * Custom-Constructor to create a <code>LocationOverlay</code>.
-	 * 
-	 * @param ctx
-	 *            The context of the complete application
-	 * @param mapView
-	 *            The map on which the overlay should be drawn
-	 */
-	public LocationOverlay(final Context ctx, final MapView mapView) {
-		this(ctx, mapView, new DefaultResourceProxyImpl(ctx));
+	private static IMyLocationProvider createGPSProvider(@NonNull Context context)
+	{
+		GpsMyLocationProvider provider = new GpsMyLocationProvider(context);
+		provider.setLocationUpdateMinDistance(50);
+		provider.setLocationUpdateMinTime(5000);
+		return provider;
 	}
 
 	/**
 	 * Custom-Constructor to create a <code>LocationOverlay</code>.
-	 * 
-	 * @param ctx
-	 *            The context of the complete application
+	 *
 	 * @param mapView
 	 *            The map on which the overlay should be drawn
-	 * @param pResourceProxy
-	 *            The proxy to handle the bitmaps
 	 */
-	public LocationOverlay(Context ctx, MapView mapView,
-			ResourceProxy pResourceProxy) {
-		super(ctx, mapView, pResourceProxy);
+	public LocationOverlay(final MapView mapView) {
+		super(createGPSProvider(mapView.getContext()), mapView);
 	}
 
 	@Override
-	public void onLocationChanged(final Location location) {
-		super.onLocationChanged(location);
+	public void onLocationChanged(final Location location, IMyLocationProvider provider) {
+		super.onLocationChanged(location, provider);
 
 		long timed = 0;
 		long time = location.getTime();
@@ -110,7 +102,7 @@ public class LocationOverlay extends MyLocationOverlay {
 			if (route.size() > 0) {
 				GeoPoint position = new GeoPoint(location);
 				if (route.get(route.size() - 1).getPosition()
-						.distanceTo(position) < 50) {
+						.distanceToAsDouble(position) < 50.0) {
 					final Context context = LocalViewContainer.getInstance()
 							.getMapView().getContext();
 					AlertDialog.Builder builder = new AlertDialog.Builder(

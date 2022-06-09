@@ -18,6 +18,9 @@
  */
 package org.traffic.jamdroid;
 
+import org.osmdroid.config.Configuration;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapView;
 import org.traffic.jamdroid.activities.BaseActivity;
 import org.traffic.jamdroid.model.DataUpdater;
@@ -28,10 +31,12 @@ import org.traffic.jamdroid.services.HandshakeTask;
 import org.traffic.jamdroid.views.InfoView;
 import org.traffic.jamdroid.views.LimitationsView;
 import org.traffic.jamdroid.views.overlays.LocationOverlay;
+import org.traffic.jamdroid.views.overlays.MyMockLocationOverlay;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.PowerManager;
 
 /**
@@ -75,7 +80,7 @@ public class TrafficJamDroidActivity extends BaseActivity {
 		
 		// setting up the wake-lock
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "TrafficJamDroidActivity");
+		wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "TrafficJamDroidActivity:wakeLock");
 
 		mDataUpdater = new DataUpdater(getApplicationContext(), updateHandler);
 		mapView = (MapView) findViewById(R.id.mapview);
@@ -88,21 +93,27 @@ public class TrafficJamDroidActivity extends BaseActivity {
 				(LimitationsView) findViewById(R.id.maplimits));
 
 		// setting up the options of the map
-		mapView.setBuiltInZoomControls(true);
+		Configuration.getInstance().setUserAgentValue(getPackageName());
+		mapView.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT);
 		mapView.setMultiTouchControls(true);
-		mapView.getController().setZoom(15);
+		mapView.getController().setZoom(15.0);
+		mapView.setTileSource(TileSourceFactory.MAPNIK);
 
 		// setting up the overlay for the current position
-		actualPosition = new LocationOverlay(this, mapView);
-		//actualPosition = new MyMockLocationOverlay(this, mapView);
-		actualPosition.setLocationUpdateMinDistance(50);
-		actualPosition.setLocationUpdateMinTime(5000);
+		//actualPosition = new LocationOverlay(mapView);
+		actualPosition = new MyMockLocationOverlay(mapView);
 		
 		actualPosition.runOnFirstFix(new Runnable() {
 
 			public void run() {
-				mapView.getController().animateTo(
-						actualPosition.getMyLocation());
+				new Handler(Looper.getMainLooper()).post(new Runnable() {
+					@Override
+					public void run() {
+
+						mapView.getController().animateTo(
+								actualPosition.getMyLocation());
+					}
+				});
 			}
 		});
 		RemoteData.getInstance().addOverlay(actualPosition, true);
@@ -116,6 +127,7 @@ public class TrafficJamDroidActivity extends BaseActivity {
 		wl.acquire();
 
 		// setting up the map
+		mapView.onResume();
 		mapView.getController()
 				.setCenter(LocalData.getInstance().getGeoPoint());
 		mapView.getOverlays().clear();
@@ -136,6 +148,8 @@ public class TrafficJamDroidActivity extends BaseActivity {
 		
 		// release the lock
 		wl.release();
+
+		mapView.onPause();
 
 		// disabling the location
 		actualPosition.disableMyLocation();
