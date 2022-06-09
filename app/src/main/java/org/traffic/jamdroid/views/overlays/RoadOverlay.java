@@ -20,7 +20,6 @@ package org.traffic.jamdroid.views.overlays;
 
 import java.util.List;
 
-import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.Projection;
@@ -68,7 +67,7 @@ public class RoadOverlay<Item extends DrawableOverlayItem> extends Overlay {
 	 *            The {@link Context} of the {@link MapView}
 	 */
 	public RoadOverlay(final List<Item> pList, final Context context) {
-		super(new DefaultResourceProxyImpl(context));
+		super();
 		this.itemList = pList;
 	}
 

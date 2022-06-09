@@ -18,7 +18,13 @@
  */
 package org.traffic.jamdroid.views;
 
-import org.osmdroid.ResourceProxy;
+import android.content.Context;
+import android.location.Location;
+import android.os.Handler;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
+
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.tileprovider.MapTileProviderBase;
 import org.osmdroid.util.GeoPoint;
@@ -26,13 +32,6 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.Projection;
 import org.traffic.jamdroid.model.SearchData;
 import org.traffic.jamdroid.views.overlays.RoutingPointOverlay;
-
-import android.content.Context;
-import android.location.Location;
-import android.os.Handler;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
 
 /**
  * A sub-class of {@link MapView} to provide some additional functions. For
@@ -64,36 +63,18 @@ public class SearchView extends MapView {
 	}
 
 	/**
-	 * Constructor with a {@link ResourceProxy}.
-	 * 
-	 * @param context
-	 *            The context of the application
-	 * @param tileSizePixels
-	 *            The size of the tiles
-	 * @param resourceProxy
-	 *            The proxy
-	 */
-	public SearchView(final Context context, final int tileSizePixels,
-			final ResourceProxy resourceProxy) {
-		this(context, tileSizePixels, resourceProxy, null);
-	}
-
-	/**
 	 * Constructor with a {@link MapTileProviderBase}.
 	 * 
 	 * @param context
 	 *            The context of the application
 	 * @param tileSizePixels
 	 *            The size of the tiles
-	 * @param resourceProxy
-	 *            The proxy
 	 * @param aTileProvider
 	 *            The provider of the tiles
 	 */
 	public SearchView(final Context context, final int tileSizePixels,
-			final ResourceProxy resourceProxy,
 			final MapTileProviderBase aTileProvider) {
-		this(context, tileSizePixels, resourceProxy, aTileProvider, null);
+		this(context, tileSizePixels, aTileProvider, null);
 	}
 
 	/**
@@ -103,18 +84,15 @@ public class SearchView extends MapView {
 	 *            The context of the application
 	 * @param tileSizePixels
 	 *            The size of the tiles
-	 * @param resourceProxy
-	 *            The proxy
 	 * @param aTileProvider
 	 *            The provider of the tiles
 	 * @param tileRequestCompleteHandler
 	 *            A handler for the tiles
 	 */
 	public SearchView(final Context context, final int tileSizePixels,
-			final ResourceProxy resourceProxy,
 			final MapTileProviderBase aTileProvider,
 			final Handler tileRequestCompleteHandler) {
-		super(context, resourceProxy, aTileProvider,
+		super(context, aTileProvider,
 				tileRequestCompleteHandler);
 		prepareView(context);
 	}

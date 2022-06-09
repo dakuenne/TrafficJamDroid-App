@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
@@ -135,8 +134,7 @@ public class UpdateGPSTask extends AsyncTask<Context, Void, Void> {
 						list.add(overlayItem);
 					}
 					ItemizedIconOverlay<OverlayItem> itemizedOverlay = new ItemizedIconOverlay<OverlayItem>(
-							list, drawable, gestureListener,
-							new DefaultResourceProxyImpl(context));
+							list, drawable, gestureListener, context);
 					remote.addOverlay(itemizedOverlay);
 				}
 

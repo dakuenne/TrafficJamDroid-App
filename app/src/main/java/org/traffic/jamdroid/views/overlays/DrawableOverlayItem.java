@@ -18,20 +18,21 @@
  */
 package org.traffic.jamdroid.views.overlays;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Rect;
 
-import org.osmdroid.util.BoundingBoxE6;
+import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.util.PointL;
+import org.osmdroid.util.RectL;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.OverlayItem;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Point;
-import android.graphics.Rect;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class provides a functionality to draw path-elements on a
@@ -43,7 +44,7 @@ import android.graphics.Rect;
 public class DrawableOverlayItem extends OverlayItem {
 
 	/** A list of all points used to draw this item */
-	private ArrayList<Point> points;
+	private ArrayList<PointL> points;
 	
 	/** A list of all points used to draw this item */
 	private List<GeoPoint> geopoints;
@@ -58,13 +59,13 @@ public class DrawableOverlayItem extends OverlayItem {
 	private final Path path = new Path();
 
 	/** A temporarily used point */
-	private final Point tmpPoint1 = new Point();
+	private final PointL tmpPoint1 = new PointL();
 
 	/** A temporarily used point */
-	private final Point tmpPoint2 = new Point();
+	private final PointL tmpPoint2 = new PointL();
 
 	/** A bounding rectangle for the current line segment */
-	private final Rect lineBounds = new Rect();
+	private final RectL lineBounds = new RectL();
 
 	/**
 	 * Custom-Constructor with a color.
@@ -96,7 +97,7 @@ public class DrawableOverlayItem extends OverlayItem {
 	 * 
 	 * @return A list with all points
 	 */
-	public List<Point> getPoints() {
+	public List<PointL> getPoints() {
 		return points;
 	}
 
@@ -145,7 +146,7 @@ public class DrawableOverlayItem extends OverlayItem {
 	 * Deletes all points
 	 */
 	public void clearPath() {
-		this.points = new ArrayList<Point>();
+		this.points = new ArrayList<PointL>();
 		this.pointsPrecomputed = 0;
 	}
 
@@ -168,7 +169,7 @@ public class DrawableOverlayItem extends OverlayItem {
 	 *            The longitude
 	 */
 	public void addPoint(final int latitudeE6, final int longitudeE6) {
-		this.points.add(new Point(latitudeE6, longitudeE6));
+		this.points.add(new PointL(latitudeE6, longitudeE6));
 	}
 
 	/**
@@ -206,25 +207,25 @@ public class DrawableOverlayItem extends OverlayItem {
 		final int size = this.points.size();
 
 		while (this.pointsPrecomputed < size) {
-			final Point pt = this.points.get(this.pointsPrecomputed);
+			final PointL pt = this.points.get(this.pointsPrecomputed);
 			pj.toProjectedPixels(pt.x, pt.y, pt);
 
 			this.pointsPrecomputed++;
 		}
 
-		Point screenPoint0 = null; // points on screen
-		Point screenPoint1 = null;
-		Point projectedPoint0; // points from the points list
-		Point projectedPoint1;
+		PointL screenPoint0 = null; // points on screen
+		PointL screenPoint1 = null;
+		PointL projectedPoint0; // points from the points list
+		PointL projectedPoint1;
 
 		// clipping rectangle in the intermediate projection, to avoid
 		// performing projection.
-		BoundingBoxE6 boundingBox = pj.getBoundingBox();
-		Point topLeft = pj.toProjectedPixels(boundingBox.getLatNorthE6(),
-				boundingBox.getLonWestE6(), null);
-		Point bottomRight = pj.toProjectedPixels(boundingBox.getLatSouthE6(),
-				boundingBox.getLonEastE6(), null);
-		final Rect clipBounds = new Rect(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
+		BoundingBox boundingBox = pj.getBoundingBox();
+		PointL topLeft = pj.toProjectedPixels(boundingBox.getLatNorth(),
+				boundingBox.getLonWest(), null);
+		PointL bottomRight = pj.toProjectedPixels(boundingBox.getLatSouth(),
+				boundingBox.getLonEast(), null);
+		final RectL clipBounds = new RectL(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
 
 		path.rewind();
 		projectedPoint0 = this.points.get(size - 1);
@@ -236,7 +237,7 @@ public class DrawableOverlayItem extends OverlayItem {
 			projectedPoint1 = this.points.get(i);
 			lineBounds.union(projectedPoint1.x, projectedPoint1.y);
 
-			if (!Rect.intersects(clipBounds, lineBounds)) {
+			if (!RectL.intersects(clipBounds, lineBounds)) {
 				// skip this line, move to next point
 				projectedPoint0 = projectedPoint1;
 				screenPoint0 = null;
@@ -247,13 +248,13 @@ public class DrawableOverlayItem extends OverlayItem {
 			// segment was out of clip
 			// bounds
 			if (screenPoint0 == null) {
-				screenPoint0 = pj.toPixelsFromProjected(projectedPoint0,
-						this.tmpPoint1);
+				screenPoint0 = pj.getLongPixelsFromProjected(projectedPoint0,
+						2, false, this.tmpPoint1);
 				path.moveTo(screenPoint0.x, screenPoint0.y);
 			}
 
-			screenPoint1 = pj.toPixelsFromProjected(projectedPoint1,
-					this.tmpPoint2);
+			screenPoint1 = pj.getLongPixelsFromProjected(projectedPoint1,
+					2, false, this.tmpPoint2);
 
 			// skip this point, too close to previous point
 			if (Math.abs(screenPoint1.x - screenPoint0.x)

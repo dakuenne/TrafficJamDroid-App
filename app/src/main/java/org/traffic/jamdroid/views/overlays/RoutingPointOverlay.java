@@ -82,7 +82,7 @@ public class RoutingPointOverlay extends Overlay {
 	}
 
 	@Override
-	protected void draw(Canvas c, MapView osmv, boolean shadow) {
+	public void draw(Canvas c, MapView osmv, boolean shadow) {
 		// transform geo-position to point on canvas
 		Projection projection = osmv.getProjection();
 		Point point = new Point();
